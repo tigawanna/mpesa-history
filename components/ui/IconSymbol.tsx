@@ -11,7 +11,7 @@ const MAPPING = {
   // See SF Symbols in the SF Symbols app on Mac.
   "house.fill": "home",
   "paperplane.fill": "send",
-  "chevron.left.forwardslash.chevron.right": "code",
+  "05.square": "settings",
   "chevron.right": "chevron-right",
 } as Partial<
   Record<
@@ -41,4 +41,19 @@ export function IconSymbol({
 }) {
   // @ts-expect-error
   return <MaterialIcons color={color} size={size} name={MAPPING[name]} style={style} />;
+}
+
+
+export function MaterialIcon({
+  name,
+  size = 24,
+  color,
+  style,
+}: {
+  name: React.ComponentProps<typeof MaterialIcons>["name"];
+  size?: number;
+  color: string | OpaqueColorValue;
+  style?: StyleProp<import("react-native").TextStyle>;
+}) {
+  return <MaterialIcons color={color} size={size} name={name} style={style} />;
 }

@@ -17,5 +17,9 @@ export function useLegendTheme() {
   const setTheme = (value: SettingsStroreType["theme"]) => {
     settings$.theme.set(value);
   };
-  return { theme, setTheme };
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
+  const isDarkMode = theme === "dark";
+  return { theme, setTheme, toggleTheme, isDarkMode };
 }
