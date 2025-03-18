@@ -1,6 +1,8 @@
+
 import React from "react";
 import { StyleSheet } from "react-native";
 import { List, Surface } from "react-native-paper";
+
 
 // Define the transaction type
 type Transaction = {
@@ -37,6 +39,11 @@ const dummyTransactions: Transaction[] = [
 ];
 
 export function HistoryList(): JSX.Element {
+
+
+ 
+
+
   function formatDate(dateString: string): string {
     return new Date(dateString).toLocaleString();
   }

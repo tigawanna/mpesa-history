@@ -18,11 +18,11 @@ import {
 } from "react-native-paper";
 import merge from "deepmerge";
 import { Colors } from "@/constants/Colors";
-import { Provider as TinybaseProvider, useCreateMergeableStore } from "tinybase/ui-react";
-import { useTinybaseStore } from "@/lib/tinybase/main-store";
+
+
 import { useLegendTheme } from "@/lib/legend-state/settings-store";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -42,7 +42,7 @@ export default function RootLayout() {
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
-  const store = useTinybaseStore();
+
   const themeStore = useLegendTheme();
   const colorScheme = themeStore.theme;
 
@@ -59,7 +59,7 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <TinybaseProvider store={store}>
+
           <PaperProvider theme={paperTheme}>
             <ThemeProvider value={paperTheme as any}>
               <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
@@ -69,7 +69,7 @@ export default function RootLayout() {
               </Stack>
             </ThemeProvider>
           </PaperProvider>
-        </TinybaseProvider>
+
       </GestureHandlerRootView>
     </SafeAreaProvider>
   );
