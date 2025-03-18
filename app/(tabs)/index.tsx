@@ -1,19 +1,20 @@
-import { Image, StyleSheet, Platform, View } from 'react-native';
+import { HistoryList } from "@/components/history/HistoryList";
+import { Image, StyleSheet, Platform, View } from "react-native";
 
-import {Text} from "react-native-paper"
+import { Text } from "react-native-paper";
 
 export default function HomeScreen() {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Home!</Text>
+    <View style={{ flex: 1 }}>
+      <HistoryList />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: 8,
   },
   stepContainer: {
@@ -25,6 +26,6 @@ const styles = StyleSheet.create({
     width: 290,
     bottom: 0,
     left: 0,
-    position: 'absolute',
+    position: "absolute",
   },
 });
