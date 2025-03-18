@@ -1,0 +1,21 @@
+import { observable } from "@legendapp/state";
+import { use$ } from "@legendapp/state/react";
+import { useColorScheme } from "react-native";
+
+type SettingsStroreType = {
+  theme: "dark" | "light" | null;
+};
+
+// Observables can be primitives or deep objects
+export const settings$ = observable<SettingsStroreType>({
+  theme: null,
+});
+
+export function useLegendTheme() {
+  const colorScheme = useColorScheme();
+  const theme = use$(() => settings$.theme.get()) ?? colorScheme;
+  const setTheme = (value: SettingsStroreType["theme"]) => {
+    settings$.theme.set(value);
+  };
+  return { theme, setTheme };
+}
