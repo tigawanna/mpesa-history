@@ -5,48 +5,23 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import "react-native-reanimated";
 
-import {
-  DarkTheme as NavigationDarkTheme,
-  DefaultTheme as NavigationDefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
-import {
-  adaptNavigationTheme,
-  MD3DarkTheme,
-  MD3LightTheme,
-  PaperProvider,
-} from "react-native-paper";
-import merge from "deepmerge";
-import { Colors } from "@/constants/Colors";
-
-
-import { useLegendTheme } from "@/lib/legend-state/settings-store";
+import { ThemeProvider } from "@react-navigation/native";
+import { PaperProvider } from "react-native-paper";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { useThemeSetup } from "@/hooks/use-theme-setup";
+import { MigrationWrapper } from "@/components/MigrationWrapper";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
-
-const customDefaultTheme = { ...MD3LightTheme, colors: Colors.light };
-const customDarkTheme = { ...MD3DarkTheme, colors: Colors.dark };
-
-const { DarkTheme, LightTheme } = adaptNavigationTheme({
-  reactNavigationLight: NavigationDefaultTheme,
-  reactNavigationDark: NavigationDarkTheme,
-});
-
-const CombinedDefaultTheme = merge(LightTheme, customDefaultTheme);
-const CombinedDarkTheme = merge(DarkTheme, customDarkTheme);
 
 export default function RootLayout() {
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
   });
 
-  const themeStore = useLegendTheme();
-  const colorScheme = themeStore.theme;
+  const { colorScheme, paperTheme } = useThemeSetup();
 
-  const paperTheme = colorScheme === "dark" ? CombinedDarkTheme : CombinedDefaultTheme;
   useEffect(() => {
     if (loaded) {
       SplashScreen.hideAsync();
@@ -59,17 +34,17 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <GestureHandlerRootView style={{ flex: 1 }}>
-
-          <PaperProvider theme={paperTheme}>
-            <ThemeProvider value={paperTheme as any}>
+        <PaperProvider theme={paperTheme}>
+          <ThemeProvider value={paperTheme as any}>
+            <MigrationWrapper>
               <StatusBar style={colorScheme === "dark" ? "light" : "dark"} />
               <Stack>
-                <Stack.Screen name="(tabs)" options={{ headerShown: false, }} />
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
                 <Stack.Screen name="+not-found" />
               </Stack>
-            </ThemeProvider>
-          </PaperProvider>
-
+            </MigrationWrapper>
+          </ThemeProvider>
+        </PaperProvider>
       </GestureHandlerRootView>
     </SafeAreaProvider>
   );

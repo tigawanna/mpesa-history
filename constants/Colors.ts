@@ -8,7 +8,7 @@ const tintColorDark = "#fff";
 
 export const Colors = {
   light: {
-    tint: tintColorLight,
+    // tint: tintColorLight,
     primary: "rgb(56, 107, 1)",
     onPrimary: "rgb(255, 255, 255)",
     primaryContainer: "rgb(183, 244, 129)",
@@ -20,6 +20,7 @@ export const Colors = {
     tertiary: "rgb(56, 102, 100)",
     onTertiary: "rgb(255, 255, 255)",
     tertiaryContainer: "rgb(187, 236, 233)",
+    tint: "rgb(187, 236, 233)",
     onTertiaryContainer: "rgb(0, 32, 31)",
     error: "rgb(186, 26, 26)",
     onError: "rgb(255, 255, 255)",
@@ -52,7 +53,7 @@ export const Colors = {
   },
 
   dark: {
-      tint: tintColorDark,
+      // tint: tintColorDark,
       primary: "rgb(156, 215, 105)",
       onPrimary: "rgb(26, 55, 0)",
       primaryContainer: "rgb(40, 80, 0)",
@@ -62,6 +63,7 @@ export const Colors = {
       secondaryContainer: "rgb(63, 74, 52)",
       onSecondaryContainer: "rgb(218, 231, 201)",
       tertiary: "rgb(160, 207, 205)",
+      tint: "rgb(160, 207, 205)",
       onTertiary: "rgb(0, 55, 54)",
       tertiaryContainer: "rgb(30, 78, 77)",
       onTertiaryContainer: "rgb(187, 236, 233)",

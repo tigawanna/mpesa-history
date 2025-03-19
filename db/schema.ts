@@ -30,3 +30,4 @@ export const historyTable = sqliteTable("history", {
 // Export type for TypeScript support
 export type HistoryEntry = typeof historyTable.$inferSelect;
 export type NewHistoryEntry = typeof historyTable.$inferInsert;
+
