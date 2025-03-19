@@ -1,68 +1,72 @@
-
 import React from "react";
 import { StyleSheet } from "react-native";
-import { List, Surface } from "react-native-paper";
+import { Avatar, List, Searchbar, Surface, useTheme } from "react-native-paper";
+import { HistoryForm } from "./HistoryForm";
+import { useLiveQuery } from "drizzle-orm/expo-sqlite";
+import { useDrizzle } from "@/db/useDrizzle";
+import { formatDate } from "@/utils/date";
 
 
-// Define the transaction type
-type Transaction = {
-  id: string;
-  name: string;
-  number: string;
-  createdAt: string;
-  updatedAt: string;
-};
-
-// Dummy data
-const dummyTransactions: Transaction[] = [
-  {
-    id: "1",
-    name: "John Doe",
-    number: "+254712345678",
-    createdAt: "2023-07-20T10:00:00Z",
-    updatedAt: "2023-07-20T10:00:00Z",
-  },
-  {
-    id: "2",
-    name: "Jane Smith",
-    number: "+254723456789",
-    createdAt: "2023-07-20T09:30:00Z",
-    updatedAt: "2023-07-20T09:30:00Z",
-  },
-  {
-    id: "3",
-    name: "Mike Johnson",
-    number: "+254734567890",
-    createdAt: "2023-07-20T09:00:00Z",
-    updatedAt: "2023-07-20T09:00:00Z",
-  },
-];
+// TODO handle large lists with load more and add indexes to name and number
 
 export function HistoryList(): JSX.Element {
+  const db = useDrizzle();
+  const [searchQuery, setSearchQuery] = React.useState("dennis");
+  const { data, error } = useLiveQuery(
+    db.query.historyTable.findMany({
+      where(fields, { like, or }) {
+        return or(like(fields.name, `%${searchQuery}%`), like(fields.number, `%${searchQuery}%`));
+      },
+    }),
+    [searchQuery]
+  );
 
 
- 
+  const [selected, setSelected] = React.useState<number[] | null>(null);
 
+  const handlelongPress = (id: number) => {
+    setSelected([id]);
+  };
+  const handleAddOrRemoveOnPress = (id: number) => {
+    if (!selected || selected?.length === 0) return;
+    setSelected((prev) => {
+      if (!prev) return [id];
+      if (prev.includes(id)) {
+        return prev.filter((item) => item !== id);
+      }
+      return [...prev, id];
+    });
+  };
 
-  function formatDate(dateString: string): string {
-    return new Date(dateString).toLocaleString();
-  }
-
+  const { colors } = useTheme();
   return (
     <Surface style={styles.container}>
-      <List.Section>
-        <List.Subheader>Transaction History</List.Subheader>
-        {dummyTransactions.map((transaction) => (
-          <List.Item
-            key={transaction.id}
-            title={transaction.name}
-            description={`${transaction.number}\nCreated: ${formatDate(
-              transaction.createdAt
-            )}\nUpdated: ${formatDate(transaction.updatedAt)}`}
-            left={(props) => <List.Icon {...props} icon="history" />}
-          />
-        ))}
+      <Surface style={styles.controlsContaner}>
+        <Searchbar placeholder="Search" onChangeText={setSearchQuery} value={searchQuery} />
+      </Surface>
+      <List.Section style={styles.listSection}>
+        {data.map((transaction) => {
+          // console.log(" == transaction == ", transaction);
+          const isItemSelected = selected?.includes(transaction.id);
+          return (
+            <List.Item
+              onLongPress={() => handlelongPress(transaction.id)}
+              onPress={() => handleAddOrRemoveOnPress(transaction.id)}
+              rippleColor={colors.primary}
+              key={transaction.id}
+              title={transaction.name}
+              style={{
+                ...styles.listItem,
+                backgroundColor: isItemSelected ? colors.inversePrimary : colors.elevation.level4,
+              }}
+              description={`${transaction.number} ${formatDate(transaction.createdAt)}`}
+              left={(props) => <Avatar.Text size={40} label={transaction.name?.[0]} />}
+              right={(props) => <List.Icon {...props} icon="chevron-right" />}
+            />
+          );
+        })}
       </List.Section>
+      <HistoryForm />
     </Surface>
   );
 }
@@ -71,5 +75,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     elevation: 1,
+    paddingHorizontal: 16,
+  },
+  controlsContaner: {
+    elevation: 1,
+  },
+  listSection: {
+    paddingVertical: 8,
+    gap: 4,
+  },
+  listItem: {
+    paddingVertical: 8,
   },
 });

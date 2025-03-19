@@ -1,7 +1,8 @@
 import { DATABASE_NAME, useInitMigrations } from "@/db/client";
-import { ActivityIndicator, Surface, Text, useTheme } from "react-native-paper";
+import { Surface, Text, useTheme } from "react-native-paper";
 import { SQLiteProvider } from "expo-sqlite";
 import { Suspense } from "react";
+import { HistoryListSuspenseFallback } from "./suspense-fallbacks";
 
 interface ExpoDrizzleWrapperProps {
   children: React.ReactNode;
@@ -30,7 +31,7 @@ export function ExpoDrizzleWrapper({ children }: ExpoDrizzleWrapperProps) {
     );
   }
   return (
-    <Suspense fallback={<ActivityIndicator size={"large"} />}>
+    <Suspense fallback={<HistoryListSuspenseFallback />}>
       <SQLiteProvider
         databaseName={DATABASE_NAME}
         useSuspense
@@ -40,3 +41,5 @@ export function ExpoDrizzleWrapper({ children }: ExpoDrizzleWrapperProps) {
     </Suspense>
   );
 }
+
+

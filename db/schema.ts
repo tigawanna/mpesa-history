@@ -19,7 +19,7 @@ export const settingsTable = sqliteTable("settings", {
 export const historyTable = sqliteTable("history", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   name: text("name").notNull(),
-  number: text("number").notNull(),
+  number: text("number").notNull().unique(),
   // Optional note/description field
   note: text("description"),
   // Timestamps for record keeping
