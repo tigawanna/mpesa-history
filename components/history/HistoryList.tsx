@@ -1,26 +1,20 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { Avatar, List, Searchbar, Surface, useTheme } from "react-native-paper";
+import { Avatar, Checkbox, Chip, List, Searchbar, Surface, useTheme } from "react-native-paper";
 import { HistoryForm } from "./HistoryForm";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { useDrizzle } from "@/db/useDrizzle";
 import { formatDate } from "@/utils/date";
-
+import { getHistory } from "@/db/data";
+import { HistoryDelete } from "./HistoryDelete";
 
 // TODO handle large lists with load more and add indexes to name and number
 
 export function HistoryList(): JSX.Element {
   const db = useDrizzle();
-  const [searchQuery, setSearchQuery] = React.useState("dennis");
-  const { data, error } = useLiveQuery(
-    db.query.historyTable.findMany({
-      where(fields, { like, or }) {
-        return or(like(fields.name, `%${searchQuery}%`), like(fields.number, `%${searchQuery}%`));
-      },
-    }),
-    [searchQuery]
-  );
-
+  const [searchQuery, setSearchQuery] = React.useState("");
+  const [reaload, setReload] = React.useState(0);
+  const { data, error } = useLiveQuery(getHistory(db,searchQuery), [searchQuery, reaload]);
 
   const [selected, setSelected] = React.useState<number[] | null>(null);
 
@@ -39,14 +33,32 @@ export function HistoryList(): JSX.Element {
   };
 
   const { colors } = useTheme();
+  const isAllSelecetd = selected?.length === data.length;
+  const isSelecting = selected && selected?.length > 0;
   return (
     <Surface style={styles.container}>
       <Surface style={styles.controlsContaner}>
         <Searchbar placeholder="Search" onChangeText={setSearchQuery} value={searchQuery} />
+        {isSelecting && (
+          <Surface style={{ flexDirection: "row", justifyContent: "space-between", padding: 8 }}>
+            <Chip>{selected?.length} Selected</Chip>
+            <HistoryDelete selected={selected} setReload={setReload} setSelected={setSelected}/>
+            <Checkbox
+              status={isAllSelecetd ? "checked" : "unchecked"}
+              onPress={() => {
+                if (isAllSelecetd) {
+                  setSelected([]);
+                } else {
+                  setSelected(data.map((item) => item.id));
+                }
+              }}
+            />
+          </Surface>
+        )}
       </Surface>
       <List.Section style={styles.listSection}>
         {data.map((transaction) => {
-          // console.log(" == transaction == ", transaction);
+      
           const isItemSelected = selected?.includes(transaction.id);
           return (
             <List.Item
@@ -75,7 +87,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     elevation: 1,
-    paddingHorizontal: 16,
+    paddingHorizontal: 4,
   },
   controlsContaner: {
     elevation: 1,
@@ -86,5 +98,7 @@ const styles = StyleSheet.create({
   },
   listItem: {
     paddingVertical: 8,
+    paddingHorizontal: 8,
+    borderRadius: 8,
   },
 });

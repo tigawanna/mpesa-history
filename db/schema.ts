@@ -23,8 +23,8 @@ export const historyTable = sqliteTable("history", {
   // Optional note/description field
   note: text("description"),
   // Timestamps for record keeping
-  createdAt: integer("created_at", { mode: "timestamp" }).default(sql`(CURRENT_TIMESTAMP)`),
-  updatedAt: integer("updated_at", { mode: "timestamp" }).default(sql`(CURRENT_TIMESTAMP)`),
+  createdAt: integer("created_at", { mode: "number" }).default(sql`(CURRENT_TIMESTAMP)`),
+  updatedAt: integer("updated_at", { mode: "number" }).default(sql`(CURRENT_TIMESTAMP)`),
 });
 
 // Export type for TypeScript support
