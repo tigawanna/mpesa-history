@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
-import { historyTable } from "./schema";
-import { DBType } from "./useDrizzle";
-
+import { historyTable } from "../schema";
+import { DBType } from "../useDrizzle";
+import { InsertHistoryEntry } from "../validators";
 
 export function getHistory(db: DBType, searchQuery: string) {
   return db.query.historyTable.findMany({
@@ -31,4 +31,20 @@ export async function deleteHistory(db: DBType, selected: number[]) {
     results,
     error: errors.length > 0 ? errors : null,
   };
+}
+
+export function handleHistoryTableInsert(db: DBType, input: InsertHistoryEntry,id?:number) {
+  if(id){
+    return db.update(historyTable).set({
+      name: input.name,
+      number: input.number,
+      note: input.note || null,
+    }).where(eq(historyTable.id, id))
+  }
+  return db.insert(historyTable).values({
+    name: input.name,
+    number: input.number,
+    note: input.note || null,
+  })
+
 }

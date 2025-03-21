@@ -1,12 +1,15 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import { Avatar, Checkbox, Chip, List, Searchbar, Surface, useTheme } from "react-native-paper";
-import { HistoryForm } from "./HistoryForm";
 import { useLiveQuery } from "drizzle-orm/expo-sqlite";
 import { useDrizzle } from "@/db/useDrizzle";
 import { formatDate } from "@/utils/date";
-import { getHistory } from "@/db/data";
+import { getHistory } from "@/db/data/history";
 import { HistoryDelete } from "./HistoryDelete";
+import { HistoryFormCreate } from "./HistoryFormCreate";
+import { HistoryFormUpdate } from "./HistoryFormUpdate";
+import {setStringAsync} from "expo-clipboard";
+import { InsertHistoryEntry } from "@/db/validators";
 
 // TODO handle large lists with load more and add indexes to name and number
 
@@ -31,6 +34,14 @@ export function HistoryList(): JSX.Element {
       return [...prev, id];
     });
   };
+  const handlePressOnce = (item: InsertHistoryEntry) => {
+        if (!selected || selected?.length === 0) {
+         setStringAsync(item.number);
+        }else{
+          if(!item.id) return
+          handleAddOrRemoveOnPress(item.id);
+        }
+  };
 
   const { colors } = useTheme();
   const isAllSelecetd = selected?.length === data.length;
@@ -42,7 +53,7 @@ export function HistoryList(): JSX.Element {
         {isSelecting && (
           <Surface style={{ flexDirection: "row", justifyContent: "space-between", padding: 8 }}>
             <Chip>{selected?.length} Selected</Chip>
-            <HistoryDelete selected={selected} setReload={setReload} setSelected={setSelected}/>
+            <HistoryDelete selected={selected} setReload={setReload} setSelected={setSelected} />
             <Checkbox
               status={isAllSelecetd ? "checked" : "unchecked"}
               onPress={() => {
@@ -58,12 +69,11 @@ export function HistoryList(): JSX.Element {
       </Surface>
       <List.Section style={styles.listSection}>
         {data.map((transaction) => {
-      
           const isItemSelected = selected?.includes(transaction.id);
           return (
             <List.Item
               onLongPress={() => handlelongPress(transaction.id)}
-              onPress={() => handleAddOrRemoveOnPress(transaction.id)}
+              onPress={() => handlePressOnce(transaction)}
               rippleColor={colors.primary}
               key={transaction.id}
               title={transaction.name}
@@ -73,12 +83,12 @@ export function HistoryList(): JSX.Element {
               }}
               description={`${transaction.number} ${formatDate(transaction.createdAt)}`}
               left={(props) => <Avatar.Text size={40} label={transaction.name?.[0]} />}
-              right={(props) => <List.Icon {...props} icon="chevron-right" />}
+              right={(props) => <HistoryFormUpdate item={transaction} />}
             />
           );
         })}
       </List.Section>
-      <HistoryForm />
+      <HistoryFormCreate />
     </Surface>
   );
 }
@@ -98,7 +108,7 @@ const styles = StyleSheet.create({
   },
   listItem: {
     paddingVertical: 8,
-    paddingHorizontal: 8,
+    paddingHorizontal: 4,
     borderRadius: 8,
   },
 });

@@ -9,6 +9,7 @@ interface MutationState<TData> {
 interface MutationOptions<TVariables, TData> {
     mutationFn: (variables: TVariables) => Promise<TData>;
     onSuccess?: (data: TData) => void;
+    onError?: (error: Error) => void;  // Added onError callback
 }
 
 interface MutationResult<TVariables, TData> extends MutationState<TData> {
@@ -40,11 +41,13 @@ export function useMutation<TVariables = unknown, TData = unknown>(
             setState(prev => ({ ...prev, data: result, isPending: false }));
             options.onSuccess?.(result);
         } catch (error) {
+            const normalizedError = error instanceof Error ? error : new Error('Unknown error');
             setState(prev => ({
                 ...prev,
-                error: error instanceof Error ? error : new Error('Unknown error'),
+                error: normalizedError,
                 isPending: false,
             }));
+            options.onError?.(normalizedError);  // Added error callback
         }
     };
 

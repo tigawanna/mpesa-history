@@ -2,6 +2,7 @@ import { sql } from "drizzle-orm";
 import { integer, text, sqliteTable } from "drizzle-orm/sqlite-core";
 
 
+
 /**
  * Settings table for storing user preferences
  * Focuses on capturing theme preference and last sync timestamp
@@ -27,7 +28,6 @@ export const historyTable = sqliteTable("history", {
   updatedAt: integer("updated_at", { mode: "number" }).default(sql`(CURRENT_TIMESTAMP)`),
 });
 
-// Export type for TypeScript support
-export type HistoryEntry = typeof historyTable.$inferSelect;
-export type NewHistoryEntry = typeof historyTable.$inferInsert;
+
+
 

@@ -1,9 +1,9 @@
-import { deleteHistory } from "@/db/data";
+import { deleteHistory } from "@/db/data/history";
 import { useDrizzle } from "@/db/useDrizzle";
 import { useMutation } from "@/hooks/use-mutation";
 import { useState } from "react";
 import { StyleSheet } from "react-native";
-import { Text, Surface, Portal, Button, Modal, Icon, useTheme, Dialog, ActivityIndicator } from "react-native-paper";
+import { Text, Surface, Portal, Button, useTheme, Dialog, ActivityIndicator } from "react-native-paper";
 import { MaterialIcon } from "../ui/IconSymbol";
 
 interface HistoryDeleteProps {
