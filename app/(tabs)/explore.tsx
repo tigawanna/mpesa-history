@@ -1,4 +1,3 @@
-import { useLegendTheme } from "@/lib/legend-state/settings-store";
 import { StyleSheet, View } from "react-native";
 import { Button, Surface, Text, Chip, Card, useTheme, Avatar, IconButton } from "react-native-paper";
 
