@@ -4,12 +4,13 @@ Am more itersted in capturing name + number pairs i don't care abut the specofic
 i prefer
 - to use typescript
 - named functions
+- if the styles has less than 3 properties inline it and dont move it to Stylesheet
 
 using
 
 - react native paper for components and styling
 - legend stte for theme/global stste management
-- drizzle + expo-sqlite
+- drizzle + expo-sqlite for primary storage
 
 drizzle sqlite tips
 

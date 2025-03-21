@@ -1,3 +1,5 @@
+import { BackupLocally } from "@/components/BackupLocally";
+import { defaultDatabaseDirectory } from "expo-sqlite";
 import { StyleSheet, View } from "react-native";
 import { Button, Surface, Text, Chip, Card, useTheme, Avatar, IconButton } from "react-native-paper";
 
@@ -8,8 +10,8 @@ export default function TabTwoScreen() {
   return (
     <Surface
       style={{ flex: 1, justifyContent: "center", alignItems: "center", gap: 16, padding: 16 }}>
-      {/* <Text variant="bodyLarge">Import Options</Text> */}
-
+      <Text variant="bodyLarge">{defaultDatabaseDirectory}</Text>
+        <BackupLocally/>
       <Card style={{ ...styles.importCard, backgroundColor: colors.elevation.level3 }}>
         <Card.Title
           title="Import Options"

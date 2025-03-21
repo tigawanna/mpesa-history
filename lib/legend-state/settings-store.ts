@@ -4,12 +4,24 @@ import { useColorScheme } from "react-native";
 
 type SettingsStroreType = {
   theme: "dark" | "light" | null;
+  localBackupPath: string | null;
+  lastBackup: Date | null;
 };
 
 // Observables can be primitives or deep objects
 export const settings$ = observable<SettingsStroreType>({
   theme: null,
+  localBackupPath: null,
+  lastBackup: null,
 });
+
+export function useLegendSettings() {
+  const settings = use$(() => settings$.get());
+  const updateSettings = (value: Partial<SettingsStroreType>) => {
+    settings$.set({ ...settings, ...value });
+  }
+  return { settings, updateSettings };
+}
 
 export function useLegendTheme() {
   const colorScheme = useColorScheme();
