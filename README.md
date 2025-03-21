@@ -1,50 +1,53 @@
-# Welcome to your Expo app 👋
+# 📱 Mpesa History Tracker
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A mobile app built with Expo & React Native to monitor and track your Mpesa transaction history, focusing on name-number pair associations.
 
-## Get started
+## 🚀 Tech Stack
 
-1. Install dependencies
+- **Frontend Framework**: React Native + Expo
+- **UI Components**: React Native Paper
+- **State Management**: Legend State
+- **Database**: SQLite + Drizzle ORM
+- **Language**: TypeScript
 
-   ```bash
-   npm install
-   ```
+## 🎯 Core Features
 
-2. Start the app
+- Track Mpesa transactions with emphasis on contact information
+- Store and manage name-number associations
+- Clean, minimal UI with Material Design
+- Offline-first architecture
+- Type-safe database operations
 
-   ```bash
-    npx expo start
-   ```
+## 🛠️ Development Setup
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
+1. Install dependencies:
 ```bash
-npm run reset-project
+npm install
+# or
+yarn install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+2. Start the Expo development server:
+```bash
+npx expo start
+```
 
-## Learn more
+## 📦 Project Structure
 
-To learn more about developing your project with Expo, look at the following resources:
+```
+mpesa-history/
+├── src/
+│   ├── db/        # Drizzle schema and configurations
+│   ├── screens/   # App screens
+│   ├── components/# Reusable components
+│   └── state/     # Legend state management
+└── App.tsx        # Entry point
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## 📝 License
 
-## Join the community
+MIT
 
-Join our community of developers creating universal apps.
+## 🤝 Contributing
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Feel free to open issues and pull requests!
