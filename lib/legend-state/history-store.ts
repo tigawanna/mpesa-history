@@ -1,6 +1,5 @@
 import { observable } from "@legendapp/state";
 import { use$ } from "@legendapp/state/react";
-import { useColorScheme } from "react-native";
 import { syncObservable } from "@legendapp/state/sync";
 import { ObservablePersistLocalStorage } from "@legendapp/state/persist-plugins/local-storage";
 

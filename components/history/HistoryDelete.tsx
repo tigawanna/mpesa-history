@@ -1,30 +1,41 @@
-
 import { useState } from "react";
 import { StyleSheet } from "react-native";
 import { Text, Surface, Portal, Button, useTheme, Dialog, ActivityIndicator } from "react-native-paper";
 import { MaterialIcon } from "../ui/IconSymbol";
+import { useHistoryMutations } from "../../lib/legend-state/history-store";
 
 interface HistoryDeleteProps {
-  selected: number[];
-  setReload: React.Dispatch<React.SetStateAction<number>>;
-  setSelected: React.Dispatch<React.SetStateAction<number[] | null>>;
+  selected: string[];
+  setSelected: React.Dispatch<React.SetStateAction<string[] | null>>;
 }
-export function HistoryDelete({ selected,setReload,setSelected }: HistoryDeleteProps) {
+
+export function HistoryDelete({ selected, setSelected }: HistoryDeleteProps) {
   const [visible, setVisible] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const { deleteEntry } = useHistoryMutations();
+  const { colors } = useTheme();
+
   const showModal = () => setVisible(true);
   const hideDialog = () => setVisible(false);
 
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    try {
+      // Delete each selected entry
+      for (const id of selected) {
+        deleteEntry(id);
+      }
+      
+      // Reset selection
+      setSelected(null);
+      hideDialog();
+    } catch (error) {
+      console.error("Error deleting entries:", error);
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
-  // const db = useDrizzle();
-  // const { data, isPending,mutate } = useMutation({
-  //   mutationFn: () => deleteHistory(db, selected),
-  //   onSuccess: () => {
-  //       setReload((prev) => prev + 1);
-  //       setSelected([]);
-  //       hideDialog()
-  //   },
-  // });
-  const {colors} = useTheme()
   return (
     <Surface style={{ ...styles.container }}>
       <Portal>
@@ -34,8 +45,16 @@ export function HistoryDelete({ selected,setReload,setSelected }: HistoryDeleteP
             <Text variant="bodyMedium">{selected.length} items will be deleted</Text>
           </Dialog.Content>
           <Dialog.Actions>
-            <Button onPress={hideDialog}>cancel</Button>
-            {/* {isPending?<ActivityIndicator/>:<Button onPress={()=>mutate(selected)}>confirm </Button>} */}
+            <Button onPress={hideDialog}>Cancel</Button>
+            {isDeleting ? 
+              <ActivityIndicator /> : 
+              <Button 
+                onPress={handleDelete} 
+                textColor={colors.error}
+              >
+                Confirm
+              </Button>
+            }
           </Dialog.Actions>
         </Dialog>
       </Portal>
@@ -45,6 +64,7 @@ export function HistoryDelete({ selected,setReload,setSelected }: HistoryDeleteP
     </Surface>
   );
 }
+
 const styles = StyleSheet.create({
   container: {},
   modalContainer: {

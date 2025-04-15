@@ -14,7 +14,7 @@ export function HistoryFormUpdate({ item }: Props) {
   const [visible, setVisible] = useState(false);
   return (
     <>
-      <HistoryForm prev={item} visible={visible} onDismiss={() => setVisible(false)} />
+      <HistoryForm initialValues={item} visible={visible} onDismiss={() => setVisible(false)} />
       <IconButton
         icon="dots-vertical"
         // style={{
